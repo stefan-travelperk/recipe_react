@@ -58,14 +58,15 @@ function Recipe(props) {
     setCurrentRecipe({ ...currentRecipe, ingredients: updatedIngredients });
   };
 
-  const deleteIngredientField = (index) => {
-      let reaminingIngredients = currentRecipe.ingredients.filter((e,i) => index !== i);
+  const deleteIngredientField = (evt, index) => {
+    evt.preventDefault();
+    let reaminingIngredients = currentRecipe.ingredients.filter((e,i) => index !== i);
 
-      setCurrentRecipe({ ...currentRecipe, ingredients: reaminingIngredients });
+    setCurrentRecipe({ ...currentRecipe, ingredients: reaminingIngredients });
   }
 
-  const addInputField = (e) => {
-      e.preventDefault();
+  const addInputField = (evt) => {
+      evt.preventDefault();
       setCurrentRecipe({ ...currentRecipe, ingredients: [...currentRecipe.ingredients, { name: "" }] });
   }
 
@@ -110,7 +111,7 @@ function Recipe(props) {
                                             value={ingredient.name}
                                             onChange={(e) => handleIngredientChange(index, e.target.value)}
                                             />
-                                            <button className="btn btn-outline-secondary" onClick={() => deleteIngredientField(index)}>x</button>
+                                            <button className="btn btn-outline-secondary" onClick={(evt) => deleteIngredientField(evt, index)}>x</button>
                                         </div>
                                     );
                                 })}
