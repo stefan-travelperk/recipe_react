@@ -1,0 +1,36 @@
+name: Merge on Review
+
+on:
+  pull_request_review:
+    types:
+      - submitted
+  pull_request:
+    types:
+      - synchronize
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check review count
+        run: |
+          REVIEWS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                   -H "Accept: application/vnd.github.v3+json" \
+                   "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
+                   | jq '. | length')
+
+          if [[ $REVIEWS -lt 2 ]]; then
+            echo "::set-output name=reviews::false"
+          else
+            echo "::set-output name=reviews::true"
+          fi
+
+  merge-conditional:
+    needs: merge
+    runs-on: ubuntu-latest
+    if: ${{ needs.merge.outputs.reviews == 'true' }}
+    steps:
+      - name: Merge pull request
+        uses: repo-sync/github-sync@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
