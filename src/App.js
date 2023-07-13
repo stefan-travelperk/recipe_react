@@ -20,6 +20,7 @@ function App() {
         </a>
       </header>
       <div>this is the body</div>
+      <div>this is the footer</div>
     </div>
   );
 }
