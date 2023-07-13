@@ -1,0 +1,4 @@
+- regExp: "^.circleci\\/.*$"
+  labels: ['circleci-config']
+- regExp: "^src\\/.*$"
+  labels: ['hello']
